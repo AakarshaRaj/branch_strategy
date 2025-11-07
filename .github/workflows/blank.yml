@@ -1,0 +1,42 @@
+name: 🏗️ Parameterized Build Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Select the target environment for the build"
+        required: true
+        default: "dev"
+        type: choice
+        options:
+          - dev
+          - sit
+          - uat
+          - prod
+      version:
+        description: "Specify the application version"
+        required: false
+        default: "1.0.0"
+      feature_flag:
+        description: "Enable experimental features?"
+        required: false
+        default: "false"
+        type: boolean
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧩 Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Display Build Parameters
+        run: |
+          echo "------------------------------------"
+          echo "Build Configuration"
+          echo "------------------------------------"
+          echo "Environment   : ${{ github.event.inputs.environment }}"
+          echo "Version       : ${{ github.event.inputs.version }}"
+          echo "Feature Flag  : ${{ github.event.inputs.feature_flag }}"
+          echo "------------------------------------"
